@@ -1,10 +1,10 @@
 import React from "react";
 import Slider from "react-slick";
-import { Link } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { articlesData } from "../../data/articles.js";
 import Card from "../../components/Card.jsx";
+import { Link } from "react-router-dom";
 
 function NextArrow(props) {
   const { className, onClick } = props;
@@ -28,7 +28,7 @@ function PrevArrow(props) {
   );
 }
 
-const Home = () => {
+export default function Home() {
   const settings = {
     dots: true,
     infinite: true,
@@ -55,34 +55,19 @@ const Home = () => {
       <h1 className="text-2xl font-bold mb-6">Welcome to MyDulcet</h1>
 
       {categories.map((cat) => (
-        <section key={cat} className="mb-16">
-          <h2 className="text-xl font-semibold mb-4">
-            {cat.charAt(0).toUpperCase() + cat.slice(1)}
-          </h2>
-
-          {/* Featured carousel */}
+        <section key={cat} className="mb-12">
+          <h2 className="text-xl font-semibold mb-4 capitalize">{cat}</h2>
           <Slider {...settings}>
             {articlesData[cat].featured.map((item) => (
               <div key={item.slug} className="px-2">
-                <Link to={`/article/${item.slug}`}>
+                <Link to={`/${cat.toLowerCase()}`}>
                   <Card image={item.image} title={item.title} teaser={item.teaser} />
                 </Link>
               </div>
             ))}
           </Slider>
-
-          {/* Latest articles grid */}
-          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            {articlesData[cat].latest.map((item) => (
-              <Link key={item.slug} to={`/article/${item.slug}`}>
-                <Card image={item.image} title={item.title} teaser={item.teaser} />
-              </Link>
-            ))}
-          </div>
         </section>
       ))}
     </div>
   );
-};
-
-export default Home;
+      }
