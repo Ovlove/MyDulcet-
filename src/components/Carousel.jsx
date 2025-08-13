@@ -1,45 +1,42 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
-import Card from '../../components/Card.jsx'
+import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import Card from './Card.jsx';
 
 export default function Carousel({ items, title }) {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [isPaused, setIsPaused] = useState(false)
-  const timeoutRef = useRef(null)
-  const navigate = useNavigate()
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const timeoutRef = useRef(null);
 
+  // Auto-play timer (4 seconds)
   useEffect(() => {
-    if (isPaused) return
+    if (isPaused) return;
 
-    timeoutRef.current = setTimeout(() => {
-      nextSlide()
-    }, 4000)
+    timeoutRef.current = setTimeout(() => nextSlide(), 4000);
+    return () => clearTimeout(timeoutRef.current);
+  }, [currentIndex, isPaused]);
 
-    return () => clearTimeout(timeoutRef.current)
-  }, [currentIndex, isPaused])
+  const prevSlide = () => setCurrentIndex((prev) => (prev === 0 ? items.length - 1 : prev - 1));
+  const nextSlide = () => setCurrentIndex((prev) => (prev === items.length - 1 ? 0 : prev + 1));
 
-  const prevSlide = () => setCurrentIndex((prev) => (prev === 0 ? items.length - 1 : prev - 1))
-  const nextSlide = () => setCurrentIndex((prev) => (prev === items.length - 1 ? 0 : prev + 1))
+  // Swipe support
+  const touchStartX = useRef(null);
+  const touchEndX = useRef(null);
 
-  const touchStartX = useRef(null)
-  const touchEndX = useRef(null)
+  const handleTouchStart = (e) => (touchStartX.current = e.changedTouches[0].screenX);
+  const handleTouchEnd = (e) => {
+    touchEndX.current = e.changedTouches[0].screenX;
+    const distance = touchStartX.current - touchEndX.current;
+    if (distance > 50) nextSlide();
+    else if (distance < -50) prevSlide();
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
 
-  const handleTouchStart = (e) => { touchStartX.current = e.changedTouches[0].screenX }
-  const handleTouchEnd = (e) => { touchEndX.current = e.changedTouches[0].screenX; handleSwipeGesture() }
-  const handleSwipeGesture = () => {
-    if (!touchStartX.current || !touchEndX.current) return
-    const distance = touchStartX.current - touchEndX.current
-    const swipeThreshold = 50
-    if (distance > swipeThreshold) nextSlide()
-    else if (distance < -swipeThreshold) prevSlide()
-    touchStartX.current = null
-    touchEndX.current = null
-  }
-
+  // Keyboard nav
   const handleKeyDown = (e) => {
-    if (e.key === 'ArrowLeft') prevSlide()
-    else if (e.key === 'ArrowRight') nextSlide()
-  }
+    if (e.key === 'ArrowLeft') prevSlide();
+    else if (e.key === 'ArrowRight') nextSlide();
+  };
 
   return (
     <section
@@ -53,10 +50,11 @@ export default function Carousel({ items, title }) {
     >
       <h2 className="text-2xl font-semibold mb-4">{title}</h2>
       <div
-        className="relative w-full max-w-4xl mx-auto overflow-hidden select-none"
+        className="relative w-full max-w-4xl mx-auto overflow-hidden rounded-lg select-none"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
+        {/* Slides */}
         {items.map((item, index) => (
           <div
             key={index}
@@ -66,12 +64,9 @@ export default function Carousel({ items, title }) {
             style={{ display: index === currentIndex ? 'block' : 'none' }}
             aria-hidden={index !== currentIndex}
           >
-            <Card
-              image={item.image}
-              title={item.title}
-              teaser={item.teaser}
-              onClick={() => navigate(`/articles/${encodeURIComponent(item.title)}`)}
-            />
+            <Link to={`/articles/${item.slug}`}>
+              <Card image={item.image} title={item.title} teaser={item.teaser} />
+            </Link>
           </div>
         ))}
 
@@ -108,5 +103,5 @@ export default function Carousel({ items, title }) {
         </div>
       </div>
     </section>
-  )
+  );
     }
