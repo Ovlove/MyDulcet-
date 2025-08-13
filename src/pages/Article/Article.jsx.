@@ -1,0 +1,62 @@
+import React from 'react'
+import { useParams } from 'react-router-dom'
+import Card from '../../components/Card.jsx'
+import Tag from '../../components/Tag.jsx'
+import Button from '../../components/ui/Button.jsx'
+
+export default function Article() {
+  const { slug } = useParams()
+
+  // Placeholder content
+  const article = {
+    title: 'Sample Article',
+    teaser: 'This is a teaser for the article. Replace with real content.',
+    image: 'https://via.placeholder.com/800x400?text=Article+Image',
+    tags: ['Example', 'Tutorial', 'Demo'],
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
+      {/* Article Hero */}
+      <div className="mb-8">
+        <img
+          src={article.image}
+          alt={article.title}
+          className="w-full h-64 object-cover rounded-md mb-4"
+        />
+        <h1 className="text-3xl font-bold mb-2">{article.title}</h1>
+        <p className="text-gray-700 dark:text-gray-300">{article.teaser}</p>
+      </div>
+
+      {/* Tags */}
+      <div className="flex flex-wrap gap-2 mb-6">
+        {article.tags.map((tag, idx) => (
+          <Tag key={idx} onClick={() => alert(`Clicked tag: ${tag}`)}>
+            {tag}
+          </Tag>
+        ))}
+      </div>
+
+      {/* Example Related Articles */}
+      <h2 className="text-2xl font-semibold mb-4">Related Articles</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {[1, 2].map((i) => (
+          <Card
+            key={i}
+            image={`https://via.placeholder.com/400x250?text=Related+${i}`}
+            title={`Related Article ${i}`}
+            teaser="A short teaser for this related article."
+            onClick={() => alert(`Clicked Related Article ${i}`)}
+          />
+        ))}
+      </div>
+
+      {/* Call-to-action */}
+      <div className="mt-8">
+        <Button onClick={() => alert('Back to articles')}>
+          Back to Articles
+        </Button>
+      </div>
+    </div>
+  )
+}
