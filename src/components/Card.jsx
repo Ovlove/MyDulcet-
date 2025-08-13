@@ -1,39 +1,13 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 
-export default function Card({ image, title, teaser, onClick, className = '', children }) {
-  const handleKeyDown = useCallback(
-    (e) => {
-      if (onClick && (e.key === 'Enter' || e.key === ' ')) {
-        e.preventDefault();
-        onClick();
-      }
-    },
-    [onClick]
-  );
-
-  const isInteractive = !!onClick;
-
+export default function Card({ image, title, teaser }) {
   return (
-    <article
-      className={`border rounded-md overflow-hidden bg-white dark:bg-gray-800 shadow hover:shadow-lg transition cursor-pointer ${className}`}
-      onClick={isInteractive ? onClick : undefined}
-      role={isInteractive ? 'button' : undefined}
-      tabIndex={isInteractive ? 0 : undefined}
-      onKeyDown={handleKeyDown}
-    >
-      {image && (
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-40 object-cover"
-          loading="lazy"
-        />
-      )}
+    <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow hover:shadow-lg transition">
+      <img src={image} alt={title} className="w-full h-48 object-cover" />
       <div className="p-4">
-        <h3 className="font-semibold text-lg mb-2">{title}</h3>
-        <p className="text-sm text-gray-600 dark:text-gray-300">{teaser}</p>
-        {children}
+        <h3 className="font-medium">{title}</h3>
+        <p className="text-sm text-gray-500 dark:text-gray-300 mt-1">{teaser}</p>
       </div>
-    </article>
+    </div>
   );
-      }
+}
