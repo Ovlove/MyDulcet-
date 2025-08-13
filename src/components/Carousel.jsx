@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
+import Card from '../../components/Card.jsx'
 
 export default function Carousel({ items, title }) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
   const timeoutRef = useRef(null)
+  const navigate = useNavigate()
 
-  // Auto-play timer (4 seconds)
   useEffect(() => {
     if (isPaused) return
 
@@ -16,51 +18,27 @@ export default function Carousel({ items, title }) {
     return () => clearTimeout(timeoutRef.current)
   }, [currentIndex, isPaused])
 
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev === 0 ? items.length - 1 : prev - 1))
-  }
+  const prevSlide = () => setCurrentIndex((prev) => (prev === 0 ? items.length - 1 : prev - 1))
+  const nextSlide = () => setCurrentIndex((prev) => (prev === items.length - 1 ? 0 : prev + 1))
 
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev === items.length - 1 ? 0 : prev + 1))
-  }
-
-  // Swipe support
   const touchStartX = useRef(null)
   const touchEndX = useRef(null)
 
-  const handleTouchStart = (e) => {
-    touchStartX.current = e.changedTouches[0].screenX
-  }
-
-  const handleTouchEnd = (e) => {
-    touchEndX.current = e.changedTouches[0].screenX
-    handleSwipeGesture()
-  }
-
+  const handleTouchStart = (e) => { touchStartX.current = e.changedTouches[0].screenX }
+  const handleTouchEnd = (e) => { touchEndX.current = e.changedTouches[0].screenX; handleSwipeGesture() }
   const handleSwipeGesture = () => {
     if (!touchStartX.current || !touchEndX.current) return
     const distance = touchStartX.current - touchEndX.current
-    const swipeThreshold = 50 // Minimum distance to count as swipe
-
-    if (distance > swipeThreshold) {
-      // Swiped left
-      nextSlide()
-    } else if (distance < -swipeThreshold) {
-      // Swiped right
-      prevSlide()
-    }
-    // Reset refs
+    const swipeThreshold = 50
+    if (distance > swipeThreshold) nextSlide()
+    else if (distance < -swipeThreshold) prevSlide()
     touchStartX.current = null
     touchEndX.current = null
   }
 
-  // Keyboard navigation for accessibility
   const handleKeyDown = (e) => {
-    if (e.key === 'ArrowLeft') {
-      prevSlide()
-    } else if (e.key === 'ArrowRight') {
-      nextSlide()
-    }
+    if (e.key === 'ArrowLeft') prevSlide()
+    else if (e.key === 'ArrowRight') nextSlide()
   }
 
   return (
@@ -69,17 +47,16 @@ export default function Carousel({ items, title }) {
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onKeyDown={handleKeyDown}
-      tabIndex={0} // Make section focusable for keyboard nav
+      tabIndex={0}
       aria-roledescription="carousel"
       aria-label={title}
     >
       <h2 className="text-2xl font-semibold mb-4">{title}</h2>
       <div
-        className="relative w-full max-w-4xl mx-auto overflow-hidden rounded-lg select-none"
+        className="relative w-full max-w-4xl mx-auto overflow-hidden select-none"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        {/* Slides */}
         {items.map((item, index) => (
           <div
             key={index}
@@ -89,16 +66,12 @@ export default function Carousel({ items, title }) {
             style={{ display: index === currentIndex ? 'block' : 'none' }}
             aria-hidden={index !== currentIndex}
           >
-            <img
-              src={item.image}
-              alt={item.title}
-              className="w-full h-64 object-cover rounded-md"
-              loading="lazy"
+            <Card
+              image={item.image}
+              title={item.title}
+              teaser={item.teaser}
+              onClick={() => navigate(`/articles/${encodeURIComponent(item.title)}`)}
             />
-            <div className="p-4 bg-white dark:bg-gray-800">
-              <h3 className="text-xl font-bold">{item.title}</h3>
-              <p className="mt-2 text-gray-700 dark:text-gray-300">{item.teaser}</p>
-            </div>
           </div>
         ))}
 
@@ -136,4 +109,4 @@ export default function Carousel({ items, title }) {
       </div>
     </section>
   )
-  }
+    }
