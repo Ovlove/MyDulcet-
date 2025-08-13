@@ -38,7 +38,7 @@ const categoryData = {
     ],
     trendingTags: ['Runway', 'Designers', 'Sustainability', 'Streetwear'],
   },
-  // Repeat for other categories: food, entertainment, sports, tech, fiction
+  // Add other categories: food, entertainment, sports, tech, fiction
 };
 
 export default function Category() {
@@ -58,8 +58,18 @@ export default function Category() {
         aria-label={`${category} category banner`}
       />
 
-      {/* Featured Articles Carousel */}
-      <Carousel items={data.featured} title="Featured Articles" />
+      {/* Featured Articles Carousel using Card */}
+      <Carousel
+        title="Featured Articles"
+        items={data.featured.map(item => ({
+          ...item,
+          content: (
+            <Link to={`/articles/${item.slug}`}>
+              <Card image={item.image} title={item.title} teaser={item.teaser} />
+            </Link>
+          )
+        }))}
+      />
 
       {/* Main content grid */}
       <div className="mt-12 grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -96,4 +106,4 @@ export default function Category() {
       </div>
     </div>
   );
-        }
+  }
