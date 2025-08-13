@@ -3,9 +3,11 @@ import Slider from "react-slick";
 import { Link } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { allArticles } from '../../data/articles.js';
+import { articlesData } from "../../data/articles.js";
+import Card from "../../components/Card.jsx";
 
-function NextArrow({ className, onClick }) {
+function NextArrow(props) {
+  const { className, onClick } = props;
   return (
     <div
       className={`${className} before:content-['▶'] before:text-primary dark:before:text-pink-400`}
@@ -15,7 +17,8 @@ function NextArrow({ className, onClick }) {
   );
 }
 
-function PrevArrow({ className, onClick }) {
+function PrevArrow(props) {
+  const { className, onClick } = props;
   return (
     <div
       className={`${className} before:content-['◀'] before:text-primary dark:before:text-pink-400`}
@@ -38,53 +41,46 @@ const Home = () => {
       { breakpoint: 1024, settings: { slidesToShow: 2 } },
       { breakpoint: 640, settings: { slidesToShow: 1 } },
     ],
-    appendDots: dots => <ul className="text-primary dark:text-pink-400">{dots}</ul>,
+    appendDots: (dots) => (
+      <div>
+        <ul className="text-primary dark:text-pink-400">{dots}</ul>
+      </div>
+    ),
   };
 
-  const articles = allArticles.slice(0, 4);
-  const fiction = allArticles.filter(a => a.category === 'Fiction').slice(0, 4);
+  const categories = Object.keys(articlesData);
 
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-6">Welcome to MyDulcet</h1>
 
-      {/* Articles Carousel */}
-      <section className="mb-12">
-        <h2 className="text-xl font-semibold mb-4">Articles</h2>
-        <Slider {...settings}>
-          {articles.map(a => (
-            <div key={a.slug} className="px-2">
-              <Link to={`/article/${a.slug}`}>
-                <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow">
-                  <img src={`/images/${a.slug}.jpg`} alt={a.title} className="w-full h-48 object-cover" />
-                  <div className="p-4">
-                    <h3 className="font-medium">{a.title}</h3>
-                  </div>
-                </div>
-              </Link>
-            </div>
-          ))}
-        </Slider>
-      </section>
+      {categories.map((cat) => (
+        <section key={cat} className="mb-16">
+          <h2 className="text-xl font-semibold mb-4">
+            {cat.charAt(0).toUpperCase() + cat.slice(1)}
+          </h2>
 
-      {/* Fiction Carousel */}
-      <section>
-        <h2 className="text-xl font-semibold mb-4">Fiction</h2>
-        <Slider {...settings}>
-          {fiction.map(a => (
-            <div key={a.slug} className="px-2">
-              <Link to={`/article/${a.slug}`}>
-                <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow">
-                  <img src={`/images/${a.slug}.jpg`} alt={a.title} className="w-full h-48 object-cover" />
-                  <div className="p-4">
-                    <h3 className="font-medium">{a.title}</h3>
-                  </div>
-                </div>
+          {/* Featured carousel */}
+          <Slider {...settings}>
+            {articlesData[cat].featured.map((item) => (
+              <div key={item.slug} className="px-2">
+                <Link to={`/article/${item.slug}`}>
+                  <Card image={item.image} title={item.title} teaser={item.teaser} />
+                </Link>
+              </div>
+            ))}
+          </Slider>
+
+          {/* Latest articles grid */}
+          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            {articlesData[cat].latest.map((item) => (
+              <Link key={item.slug} to={`/article/${item.slug}`}>
+                <Card image={item.image} title={item.title} teaser={item.teaser} />
               </Link>
-            </div>
-          ))}
-        </Slider>
-      </section>
+            ))}
+          </div>
+        </section>
+      ))}
     </div>
   );
 };
