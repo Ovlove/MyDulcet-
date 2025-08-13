@@ -101,7 +101,7 @@ export default function Category() {
         items={data.featured.map(item => ({
           ...item,
           content: (
-            <Link to={`/articles/${item.slug}`}>
+            <Link to={`/article/${item.slug}`}>
               <Card image={item.image} title={item.title} teaser={item.teaser} />
             </Link>
           )
@@ -113,7 +113,7 @@ export default function Category() {
         {/* Latest articles grid */}
         <section className="md:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-6">
           {data.latest.map((item, idx) => (
-            <Link key={idx} to={`/articles/${item.slug}`}>
+            <Link key={idx} to={`/article/${item.slug}`}>
               <Card image={item.image} title={item.title} teaser={item.teaser} />
             </Link>
           ))}
@@ -121,4 +121,22 @@ export default function Category() {
 
         {/* Sidebar */}
         <aside className="hidden md:block bg-gray-100 dark:bg-gray-900 p-4 rounded-md">
-          <h
+          <h4 className="font-semibold mb-4">Trending Tags</h4>
+          <div className="flex flex-wrap gap-2">
+            {data.trendingTags.map((tag, idx) => (
+              <Tag key={idx} onClick={() => alert(`Tag clicked: ${tag}`)}>
+                {tag}
+              </Tag>
+            ))}
+          </div>
+
+          <div className="mt-6">
+            <Button onClick={() => alert('See all articles')}>
+              See All Articles
+            </Button>
+          </div>
+        </aside>
+      </div>
+    </div>
+  );
+    }
