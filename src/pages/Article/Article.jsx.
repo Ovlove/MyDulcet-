@@ -1,80 +1,76 @@
-import React from 'react';
-import { useParams, Link } from 'react-router-dom';
-import Card from '../../components/Card.jsx';
-import Button from '../../components/ui/Button.jsx';
+import React from 'react'
+import { useParams, Link } from 'react-router-dom'
+import Tag from '../../components/Tag.jsx'
+import Button from '../../components/ui/Button.jsx'
 
-const categoryData = {
-  fashion: {
-    featured: [
-      {
-        image: 'https://via.placeholder.com/800x400?text=Fashion+Featured+1',
-        title: 'Spring Collection 2025',
-        teaser: 'Discover the latest trends in fashion this spring',
-        slug: 'spring-collection-2025',
-      },
-      {
-        image: 'https://via.placeholder.com/800x400?text=Fashion+Featured+2',
-        title: 'Sustainable Fashion Brands',
-        teaser: 'Learn about eco-friendly fashion choices',
-        slug: 'sustainable-fashion-brands',
-      },
-    ],
-    latest: [
-      {
-        image: 'https://via.placeholder.com/400x250?text=Fashion+Latest+1',
-        title: 'Vintage Styles Revival',
-        teaser: 'How retro fashion is making a comeback',
-        slug: 'vintage-styles-revival',
-      },
-      {
-        image: 'https://via.placeholder.com/400x250?text=Fashion+Latest+2',
-        title: 'Accessorizing Like a Pro',
-        teaser: 'Tips to elevate your look with accessories',
-        slug: 'accessorizing-like-a-pro',
-      },
-    ],
+// Combined data for articles + fiction
+const contentData = {
+  'spring-collection-2025': {
+    title: 'Spring Collection 2025',
+    teaser: 'Discover the latest trends in fashion this spring',
+    image: 'https://via.placeholder.com/800x400?text=Fashion+Featured+1',
+    body: 'Here is a detailed article about the Spring Collection 2025...',
+    tags: ['Fashion', 'Trends', 'Spring'],
   },
-  // Add other categories here: food, entertainment, sports, tech, fiction
-};
+  'sustainable-fashion-brands': {
+    title: 'Sustainable Fashion Brands',
+    teaser: 'Learn about eco-friendly fashion choices',
+    image: 'https://via.placeholder.com/800x400?text=Fashion+Featured+2',
+    body: 'This article discusses sustainable brands and how to shop responsibly...',
+    tags: ['Fashion', 'Sustainability', 'Brands'],
+  },
+  'enchanted-forest-tale': {
+    title: 'Enchanted Forest Tale',
+    teaser: 'A magical journey through a mystical forest',
+    image: 'https://via.placeholder.com/800x400?text=Fiction+Story',
+    body: 'Once upon a time, in an enchanted forest...',
+    tags: ['Fiction', 'Fantasy', 'Magic'],
+  },
+}
 
 export default function Article() {
-  const { slug } = useParams();
+  const { slug } = useParams()
+  const item = contentData[slug]
 
-  // Flatten all articles for easy search
-  const allArticles = Object.values(categoryData).flatMap(
-    (cat) => [...cat.featured, ...cat.latest]
-  );
-
-  const article = allArticles.find((item) => item.slug === slug);
-
-  if (!article) {
+  if (!item) {
     return (
       <div className="p-8 text-center">
-        <h2 className="text-2xl font-bold mb-4">Article Not Found</h2>
+        <h2 className="text-2xl font-semibold mb-4">Article not found</h2>
         <Link to="/">
-          <Button>Go Back Home</Button>
+          <Button>Return Home</Button>
         </Link>
       </div>
-    );
+    )
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
-      <h1 className="text-3xl font-bold mb-4">{article.title}</h1>
-      {article.image && (
-        <img
-          src={article.image}
-          alt={article.title}
-          className="w-full h-64 object-cover rounded-md mb-6"
-        />
-      )}
-      <p className="text-gray-700 dark:text-gray-300 text-lg">{article.teaser}</p>
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
+      <h1 className="text-3xl font-bold mb-2">{item.title}</h1>
+      <p className="text-gray-700 dark:text-gray-300 mb-6">{item.teaser}</p>
+      <img
+        src={item.image}
+        alt={item.title}
+        className="w-full rounded-lg mb-6 object-cover"
+      />
+      <div className="prose dark:prose-invert max-w-full">
+        <p>{item.body}</p>
+      </div>
 
-      <div className="mt-8">
+      {item.tags && item.tags.length > 0 && (
+        <div className="mt-6 flex flex-wrap gap-2">
+          {item.tags.map((tag, idx) => (
+            <Tag key={idx} onClick={() => alert(`Tag clicked: ${tag}`)}>
+              {tag}
+            </Tag>
+          ))}
+        </div>
+      )}
+
+      <div className="mt-6">
         <Link to="/">
           <Button>Back to Home</Button>
         </Link>
       </div>
     </div>
-  );
+  )
 }
