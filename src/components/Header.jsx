@@ -22,7 +22,6 @@ export default function Header({ darkMode, toggleDarkMode, menuOpen, toggleMenu 
           {/* Left: Site name / logo */}
           <div className="flex items-center space-x-4">
             <Link to="/" className="flex items-center gap-3">
-              {/* Optional logo square */}
               <span className="inline-block w-9 h-9 rounded-md bg-primary dark:bg-pink-400" aria-hidden="true" />
               <span className="text-xl font-bold text-primary dark:text-pink-200">MyDulcet</span>
             </Link>
@@ -41,9 +40,8 @@ export default function Header({ darkMode, toggleDarkMode, menuOpen, toggleMenu 
             ))}
           </nav>
 
-          {/* Right side: dark toggle + mobile button */}
+          {/* Right: dark toggle + mobile button */}
           <div className="flex items-center gap-3">
-            {/* Dark mode toggle */}
             <button
               onClick={toggleDarkMode}
               aria-label="Toggle dark mode"
@@ -60,7 +58,6 @@ export default function Header({ darkMode, toggleDarkMode, menuOpen, toggleMenu 
               )}
             </button>
 
-            {/* Mobile menu button */}
             <button
               onClick={toggleMenu}
               aria-label={menuOpen ? "Close menu" : "Open menu"}
@@ -68,11 +65,11 @@ export default function Header({ darkMode, toggleDarkMode, menuOpen, toggleMenu 
               className="md:hidden p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
             >
               {menuOpen ? (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-900 dark:text-gray-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-900 dark:text-gray-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               )}
@@ -81,7 +78,7 @@ export default function Header({ darkMode, toggleDarkMode, menuOpen, toggleMenu 
         </div>
       </div>
 
-      {/* Mobile menu panel */}
+      {/* Mobile menu */}
       {menuOpen && (
         <div className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
           <nav className="px-4 py-3 space-y-2">
@@ -89,19 +86,14 @@ export default function Header({ darkMode, toggleDarkMode, menuOpen, toggleMenu 
               <Link
                 key={link.name}
                 to={link.path}
-                onClick={toggleMenu} // closes menu on click
+                onClick={toggleMenu}
                 className="block px-3 py-2 rounded text-gray-800 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800"
               >
                 {link.name}
               </Link>
             ))}
-
-            {/* Newsletter CTA */}
             <div className="pt-2 border-t border-gray-100 dark:border-gray-800 mt-2">
-              <a
-                href="#newsletter"
-                className="block px-3 py-2 text-sm text-primary dark:text-pink-300 hover:underline"
-              >
+              <a href="#newsletter" className="block px-3 py-2 text-sm text-primary dark:text-pink-300 hover:underline">
                 Sign up for our newsletter
               </a>
             </div>
@@ -110,4 +102,4 @@ export default function Header({ darkMode, toggleDarkMode, menuOpen, toggleMenu 
       )}
     </header>
   )
-              }
+            }
