@@ -1,62 +1,80 @@
-import React from 'react'
-import { useParams } from 'react-router-dom'
-import Card from '../../components/Card.jsx'
-import Tag from '../../components/Tag.jsx'
-import Button from '../../components/ui/Button.jsx'
+import React from 'react';
+import { useParams, Link } from 'react-router-dom';
+import Card from '../../components/Card.jsx';
+import Button from '../../components/ui/Button.jsx';
+
+const categoryData = {
+  fashion: {
+    featured: [
+      {
+        image: 'https://via.placeholder.com/800x400?text=Fashion+Featured+1',
+        title: 'Spring Collection 2025',
+        teaser: 'Discover the latest trends in fashion this spring',
+        slug: 'spring-collection-2025',
+      },
+      {
+        image: 'https://via.placeholder.com/800x400?text=Fashion+Featured+2',
+        title: 'Sustainable Fashion Brands',
+        teaser: 'Learn about eco-friendly fashion choices',
+        slug: 'sustainable-fashion-brands',
+      },
+    ],
+    latest: [
+      {
+        image: 'https://via.placeholder.com/400x250?text=Fashion+Latest+1',
+        title: 'Vintage Styles Revival',
+        teaser: 'How retro fashion is making a comeback',
+        slug: 'vintage-styles-revival',
+      },
+      {
+        image: 'https://via.placeholder.com/400x250?text=Fashion+Latest+2',
+        title: 'Accessorizing Like a Pro',
+        teaser: 'Tips to elevate your look with accessories',
+        slug: 'accessorizing-like-a-pro',
+      },
+    ],
+  },
+  // Add other categories here: food, entertainment, sports, tech, fiction
+};
 
 export default function Article() {
-  const { slug } = useParams()
+  const { slug } = useParams();
 
-  // Placeholder content
-  const article = {
-    title: 'Sample Article',
-    teaser: 'This is a teaser for the article. Replace with real content.',
-    image: 'https://via.placeholder.com/800x400?text=Article+Image',
-    tags: ['Example', 'Tutorial', 'Demo'],
+  // Flatten all articles for easy search
+  const allArticles = Object.values(categoryData).flatMap(
+    (cat) => [...cat.featured, ...cat.latest]
+  );
+
+  const article = allArticles.find((item) => item.slug === slug);
+
+  if (!article) {
+    return (
+      <div className="p-8 text-center">
+        <h2 className="text-2xl font-bold mb-4">Article Not Found</h2>
+        <Link to="/">
+          <Button>Go Back Home</Button>
+        </Link>
+      </div>
+    );
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
-      {/* Article Hero */}
-      <div className="mb-8">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
+      <h1 className="text-3xl font-bold mb-4">{article.title}</h1>
+      {article.image && (
         <img
           src={article.image}
           alt={article.title}
-          className="w-full h-64 object-cover rounded-md mb-4"
+          className="w-full h-64 object-cover rounded-md mb-6"
         />
-        <h1 className="text-3xl font-bold mb-2">{article.title}</h1>
-        <p className="text-gray-700 dark:text-gray-300">{article.teaser}</p>
-      </div>
+      )}
+      <p className="text-gray-700 dark:text-gray-300 text-lg">{article.teaser}</p>
 
-      {/* Tags */}
-      <div className="flex flex-wrap gap-2 mb-6">
-        {article.tags.map((tag, idx) => (
-          <Tag key={idx} onClick={() => alert(`Clicked tag: ${tag}`)}>
-            {tag}
-          </Tag>
-        ))}
-      </div>
-
-      {/* Example Related Articles */}
-      <h2 className="text-2xl font-semibold mb-4">Related Articles</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {[1, 2].map((i) => (
-          <Card
-            key={i}
-            image={`https://via.placeholder.com/400x250?text=Related+${i}`}
-            title={`Related Article ${i}`}
-            teaser="A short teaser for this related article."
-            onClick={() => alert(`Clicked Related Article ${i}`)}
-          />
-        ))}
-      </div>
-
-      {/* Call-to-action */}
       <div className="mt-8">
-        <Button onClick={() => alert('Back to articles')}>
-          Back to Articles
-        </Button>
+        <Link to="/">
+          <Button>Back to Home</Button>
+        </Link>
       </div>
     </div>
-  )
+  );
 }
