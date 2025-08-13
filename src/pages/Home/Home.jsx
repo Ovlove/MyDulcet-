@@ -2,9 +2,6 @@ import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { articlesData } from "../../data/articles.js";
-import Card from "../../components/Card.jsx";
-import { Link } from "react-router-dom";
 
 function NextArrow(props) {
   const { className, onClick } = props;
@@ -28,7 +25,7 @@ function PrevArrow(props) {
   );
 }
 
-export default function Home() {
+const Home = () => {
   const settings = {
     dots: true,
     infinite: true,
@@ -48,26 +45,69 @@ export default function Home() {
     ),
   };
 
-  const categories = Object.keys(articlesData);
+  const articles = [
+    { id: 1, title: "Article One", image: "/images/article1.jpg" },
+    { id: 2, title: "Article Two", image: "/images/article2.jpg" },
+    { id: 3, title: "Article Three", image: "/images/article3.jpg" },
+    { id: 4, title: "Article Four", image: "/images/article4.jpg" },
+  ];
+
+  const fiction = [
+    { id: 1, title: "Fiction One", image: "/images/fiction1.jpg" },
+    { id: 2, title: "Fiction Two", image: "/images/fiction2.jpg" },
+    { id: 3, title: "Fiction Three", image: "/images/fiction3.jpg" },
+    { id: 4, title: "Fiction Four", image: "/images/fiction4.jpg" },
+  ];
 
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-6">Welcome to MyDulcet</h1>
 
-      {categories.map((cat) => (
-        <section key={cat} className="mb-12">
-          <h2 className="text-xl font-semibold mb-4 capitalize">{cat}</h2>
-          <Slider {...settings}>
-            {articlesData[cat].featured.map((item) => (
-              <div key={item.slug} className="px-2">
-                <Link to={`/${cat.toLowerCase()}`}>
-                  <Card image={item.image} title={item.title} teaser={item.teaser} />
-                </Link>
+      {/* Articles Carousel */}
+      <section className="mb-12">
+        <h2 className="text-xl font-semibold mb-4">Articles</h2>
+        <Slider {...settings}>
+          {articles.map((item) => (
+            <div key={item.id} className="px-2">
+              <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-48 object-cover"
+                  loading="lazy"
+                />
+                <div className="p-4">
+                  <h3 className="font-medium">{item.title}</h3>
+                </div>
               </div>
-            ))}
-          </Slider>
-        </section>
-      ))}
+            </div>
+          ))}
+        </Slider>
+      </section>
+
+      {/* Fiction Carousel */}
+      <section>
+        <h2 className="text-xl font-semibold mb-4">Fiction</h2>
+        <Slider {...settings}>
+          {fiction.map((item) => (
+            <div key={item.id} className="px-2">
+              <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-48 object-cover"
+                  loading="lazy"
+                />
+                <div className="p-4">
+                  <h3 className="font-medium">{item.title}</h3>
+                </div>
+              </div>
+            </div>
+          ))}
+        </Slider>
+      </section>
     </div>
   );
-      }
+};
+
+export default Home;
