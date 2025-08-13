@@ -40,8 +40,8 @@ export default function App() {
           <Route path="/about" element={<AboutUs />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/:category" element={<Category />} />
-          {/* New Article Route */}
-          <Route path="/article/:slug" element={<Article />} />
+          {/* Updated Article Route */}
+          <Route path="/articles/:slug" element={<Article />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
