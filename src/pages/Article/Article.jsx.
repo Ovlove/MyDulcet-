@@ -1,53 +1,13 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Button from '../../components/ui/Button.jsx';
-
-// Combine all category data for slug lookup
-const allArticles = [
-  // Fashion
-  { slug: 'spring-collection-2025', title: 'Spring Collection 2025', content: 'Discover the latest trends in fashion this spring.', category: 'Fashion' },
-  { slug: 'sustainable-fashion-brands', title: 'Sustainable Fashion Brands', content: 'Learn about eco-friendly fashion choices.', category: 'Fashion' },
-  { slug: 'vintage-styles-revival', title: 'Vintage Styles Revival', content: 'How retro fashion is making a comeback.', category: 'Fashion' },
-  { slug: 'accessorizing-like-a-pro', title: 'Accessorizing Like a Pro', content: 'Tips to elevate your look with accessories.', category: 'Fashion' },
-
-  // Food
-  { slug: 'easy-summer-recipes', title: 'Easy Summer Recipes', content: 'Quick and delicious meals for hot days.', category: 'Food' },
-  { slug: 'vegan-baking-tips', title: 'Vegan Baking Tips', content: 'How to make your desserts vegan-friendly.', category: 'Food' },
-  { slug: 'homemade-pasta', title: 'Homemade Pasta', content: 'Step-by-step guide to fresh pasta.', category: 'Food' },
-  { slug: 'exotic-spices', title: 'Exotic Spices', content: 'Add new flavors to your cooking.', category: 'Food' },
-
-  // Entertainment
-  { slug: 'top-movies-this-month', title: 'Top Movies This Month', content: 'Must-watch films in theaters now.', category: 'Entertainment' },
-  { slug: 'celebrity-interviews', title: 'Celebrity Interviews', content: 'Exclusive talks with your favorite stars.', category: 'Entertainment' },
-  { slug: 'award-show-highlights', title: 'Award Show Highlights', content: 'Best moments from the latest awards.', category: 'Entertainment' },
-  { slug: 'upcoming-concerts', title: 'Upcoming Concerts', content: 'Don’t miss these live performances.', category: 'Entertainment' },
-
-  // Sports
-  { slug: 'championship-recap', title: 'Championship Recap', content: 'Highlights from the latest games.', category: 'Sports' },
-  { slug: 'athlete-profiles', title: 'Athlete Profiles', content: 'Get to know the top players.', category: 'Sports' },
-  { slug: 'training-tips', title: 'Training Tips', content: 'Improve your skills with these exercises.', category: 'Sports' },
-  { slug: 'upcoming-matches', title: 'Upcoming Matches', content: 'Mark your calendar for big events.', category: 'Sports' },
-
-  // Tech
-  { slug: 'latest-gadgets-2025', title: 'Latest Gadgets 2025', content: 'New tech releases you should know about.', category: 'Tech' },
-  { slug: 'ai-innovations', title: 'AI Innovations', content: 'How AI is changing the world.', category: 'Tech' },
-  { slug: 'smart-home-tips', title: 'Smart Home Tips', content: 'Make your house smarter easily.', category: 'Tech' },
-  { slug: 'programming-trends', title: 'Programming Trends', content: 'What’s hot in coding this year.', category: 'Tech' },
-
-  // Fiction
-  { slug: 'mystery-short-story', title: 'Mystery Short Story', content: 'A thrilling tale to keep you guessing.', category: 'Fiction' },
-  { slug: 'romantic-novella', title: 'Romantic Novella', content: 'A love story that touches the heart.', category: 'Fiction' },
-  { slug: 'fantasy-excerpt', title: 'Fantasy Excerpt', content: 'Dive into a magical world.', category: 'Fiction' },
-  { slug: 'sci-fi-chapter', title: 'Sci-Fi Chapter', content: 'Explore the future of humanity.', category: 'Fiction' },
-];
+import { allArticles } from '../../data/articles.js';
 
 export default function Article() {
   const { slug } = useParams();
   const article = allArticles.find(a => a.slug === slug);
 
-  if (!article) {
-    return <div className="p-8 text-center">Article not found.</div>;
-  }
+  if (!article) return <div className="p-8 text-center">Article not found.</div>;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
