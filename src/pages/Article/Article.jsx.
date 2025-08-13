@@ -13,7 +13,7 @@ export default function Article() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
       <h1 className="text-3xl font-bold mb-4">{article.title}</h1>
       <p className="text-sm text-gray-500 mb-6">Category: {article.category}</p>
-      <div className="prose dark:prose-dark">
+      <div className="prose dark:prose-invert">
         <p>{article.content}</p>
       </div>
 
