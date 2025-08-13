@@ -73,7 +73,7 @@ export const articlesData = {
   },
 };
 
-// Flatten all articles for Article page lookup
+// Flatten all articles for slug lookup
 export const allArticles = Object.entries(articlesData).flatMap(([category, catData]) =>
   [...catData.featured, ...catData.latest].map(a => ({
     slug: a.slug,
